@@ -1,0 +1,21 @@
+Command Purpose,MS DOS,Linux,Basic Linux Example
+Copies files,copy,cp,cp thisfile.txt /home/thisdirectory
+Moves files,move,mv,mv thisfile.txt /home/thisdirectory
+Lists files and directories,dir,ll or ls,ll
+Clears screen,cls,clear,clear
+Closes shell prompt,exit,exit,exit
+Displays or sets date,date,date,date
+Deletes files,del,rm,rm thisfile.txt
+"""Echoes"" output to the screen",echo,echo,echo this message
+Edits text files,edit,gedit,gedit thisfile.txt
+Compares the contents of files,fc,diff,diff file1 file2
+Finds a string of text in a file,find,grep,grep word or phrase thisfile.txt
+Displays command help,command /?,man or info,man command
+Creates a directory,mkdir,mkdir,mkdir directory
+Views contents of a file,more,less,less thisfile.txt
+Renames a file,ren,mv,mv thisfile.txt thatfile.txt
+Displays your location in the file system,chdir,pwd,pwd
+Changes directories with a specified path (absolute path),cd pathname,cd pathname,cd /directory/directory
+Changes directories with a relative path,cd..,cd ..,cd ..
+Displays the time,time,date,date
+Shows amount of RAM in use,mem,free,free

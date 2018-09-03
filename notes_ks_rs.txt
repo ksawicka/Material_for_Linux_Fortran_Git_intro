@@ -1,0 +1,48 @@
+1. Dodac instrukcje krok po kroku do instalowania programow, co .
+2. Dodaj do sekcji o MobaXterm instrukcje 'Start local termial'.
+
+------------------------------------------------------------------
+Z mejla taty 03.09.2018
+0. Ja lubie widziec idee jak cos ma dzialac zanim szczególowo sie to zacznie przerabiac.
+
+W tym przypadku moze cos takiego by mi pomoglo wsadzone miedzy:
+Connecting to Linux from Windows machine
+MobaXterm
+
+Connecting to Linux from Windows machine
+Zasadniczo jedyne czego do tego potrzeba to program na Windows potrafiacy "poruszac sie" w na podlaczanych potem komputerach obslugiwanych przez Linux.
+Przykladowym takim programen jest MobaXterm
+MobaXterm
+
+
+1. dzialanie podanych komend Linux w MobaXterm
+
+Niektóre, przynajmniej bez polaczenia do serwera, nie dzialaja (bash: getedit: command not found)
+ale to pewnie niewazne
+
+ta komenda ll podana w przykladzie jest dosc podstawowa i powinna byc w spisie komend na górze, a nie dopiero w przykladach
+
+
+2. Dopiero jak przeczytalem calosc ponizej zaczalem ja czytac powtórnie rozbijajac:
+
+There are three ways a Windows and Linux directories can communicate (can be accessed from one to another). 1. Mount your Linux home directory (your user Linux directory) from your Windows machine - this allows to access your Linux files in Windows Explorator, etc - very easy and useful. 2. Use WinSCP program, which is a file manager that allows you to - also very easy and useful, has similar functionality to no 1. 3. Mount your local computer drives from Linux - this allows to access your local computer files from Linux terminal - we will not be using that. Mounting your Linux home directory from your local Windows computer is done using Windows CMD. The command needed to mount Wallingford’s Linux home directory from is:
+
+Np.
+(wstawilem do przetlumaczenia
+ - potem omówione bardziej szczególowo
+)
+
+There are three ways a Windows and Linux directories can communicate (can be accessed from one to another) - dwie oierwsze omówione potem bardziej szczególowo.
+1. Mount your Linux home directory (your user Linux directory) from your Windows machine - this allows to access your Linux files in Windows Explorator, etc - very easy and useful.
+2. Use WinSCP program, which is a file manager that allows you to - also very easy and useful, has similar functionality to no 1.
+3. Mount your local computer drives from Linux - this allows to access your local computer files from Linux terminal - we will not be using that.
+
+Mounting your Linux home directory from your local Windows computer is done using Windows CMD. The command needed to mount Wallingford's Linux home directory from is:
+...
+
+W ogóle to calosc potem mi sie podobala i chcialbym móc to wszystko przeczesac...
+Ale to juz nie jest godzina roboty :((
+I wymaga serwera linux :((
+t
+
+--------------------------------------------------
