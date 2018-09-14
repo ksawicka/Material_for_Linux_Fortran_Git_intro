@@ -585,6 +585,7 @@ There is many tutorials on how to start with Git (e.g. https://git-scm.com/book/
 
 Here, it is collated a number of useful git commands with the 'circlearea' program study case (Section _Writing, compiling and running a Fortran program on Linux_). This set of commands will be always useful to have at hand.
 
+
 ## Customizing Git
 
 First, customize Git in the Linux terminal to work for you. You should have to do these things only once on any given computer; they’ll stick around between upgrades. You can also change them at any time by running through the commands again.
@@ -691,14 +692,17 @@ git clone https://github.com/ksawicka/tmp.git
 
 That creates a directory named 'tmp', initializes a '.git' directory inside it, pulls down all the data for that repository, and checks out a working copy of the latest version. If you go into the new 'tmp' directory that was just created, you’ll see the project files in there, ready to be worked on or used.
 
-Pulling any changes from online repository, after for example you know your colleague has done work on, can be done via `pull` command. Try:
+Pulling any changes from online repository, after, for example, you know your colleague has done work on, can be done via `pull` command. Try:
 
 ```{bash, eval = FALSE}
 # Pull changes
 git pull
 ```
 
-## Branches on Git
+Read more about `git pull` in the _Merging work on branches_ section.
+
+
+## Creating branches on Git
 
 In a project or a repository, you want to keep your 'master' branch clean, with only tested and validated code. To work on your code, where you may expect to make mistakes, you can create at any time a branch from your master. 
 
@@ -773,7 +777,10 @@ Another useful command is `gitk` that allows you to see all the changes in a fil
 gitk circlearea.f90
 ```
 
-Finally, (although there is so much more one could and will learn about using git), above shows a workflow used the most often byu git users. This workflow has one disadvantage (for me, personally), it doesn't allow you to have separate copies of each branch on local disk. The local directory that is your local repository, if you were to view files in it using a file manager, will always keep the latest changes you've done to your files. 
+
+## Worktree
+
+Above shows a workflow used the most often byu git users. This workflow has one disadvantage (for me, personally), it doesn't allow you to have separate copies of each branch on local disk. The local directory that is your local repository, if you were to view files in it using a file manager, will always keep the latest changes you've done to your files. 
 
 There is, however, a way to have local copies of each branch accessible as directories from a file manager, e.g. WinSCP we covered earlier. One would ask, why would you want to do it? But if you're used to a Windows file managers and new to git, this may be a way to start working with. 
 
@@ -792,6 +799,140 @@ cd ..; ll
 ```
 
 You should now be able to see a separate directory for your new my_second_branch.
+
+
+## Merging work on branches 
+
+Separating different topics/files/code versions into different branches is good practice. By not mixing up code from one feature / bugfix / experiment with another, you avoid a lot of problems - don't have to worry about breaking things in your development branches and overwriting the master.
+
+At some point your code will (hopefully) reach a state where you'll want to integrate it with the rest of the project. This is where the `git merge` command comes in.
+
+Before merging your code into one of your project's long-running branches (like a "development" or "master" branch), make sure that your local repository is up to date. Both your local branch and the receiving branch should be updated with the latest changes from your remote server.
+
+
+```{bash, eval = FALSE}
+# fetch any updates from a remote server
+git fetch
+# check if master has received new changes on the remote
+git branch -va
+# make master an active branch
+git checkout master
+# update master
+git pull
+```
+
+Difference between `git fetch` and `git pull` is that `git fetch` doesn’t touch your working tree at all, it doesn't integrate any of this new data into your working files. This gives you a little breathing space to decide what you want to do next. 
+
+`git pull` in contrast, is used with a different goal in mind: to update your current HEAD branch (an active branch) with the latest changes from the remote server. This means that pull not only downloads new data, but it also directly integrates it into your current working copy files. This has a couple of consequences:
+
+* Since `git pull` tries to merge remote changes with your local ones, a so-called "merge conflict" can occur. Check out this tutorial for more information: https://www.git-tower.com/learn/git/ebook/en/command-line/advanced-topics/merge-conflicts
+
+* Like for many other actions, it's highly recommended to start a `git pull` only with a clean working copy. This means that you should not have any uncommitted local changes before you pull. Use Git's Stash feature to save your local changes temporarily.
+
+With such preparation, the actual merge process itself should be easy. Note you're still checked out in master:
+
+```{bash, eval = FALSE}
+# merge branch <BRANCH NAME> with master
+# to bring changes to local master from your branch
+git merge <BRANCH NAME>
+# push current HEAD to remote master branch
+git push origin master 
+```
+
+
+## Undo Git changes/ revert to a previous version
+
+There may be a number of situations where you want to undo what you've done or retrive previous versions of files. When you make a new commit, Git stores a snapshot of your repository at that specific moment in time. You can use Git to go back to an earlier version of your project.
+
+This excellent post https://blog.github.com/2015-06-08-how-to-undo-almost-anything-with-git/ collates possible scenarios and below instructions are an extract from it. For more details on what's actually happening during evoking each command, reach for the blog above.
+
+Extra note: Each commit is characterized with a unique hash key (SHA) created using metadata such as the commit message, date, commiter's name and the hash of the root tree object. To learn more about commits anatomy and hash keys read: https://blog.thoughtram.io/git/2014/11/18/the-anatomy-of-a-git-commit.html.
+
+The commit hash key can be used to identify particular changes in files or revert it to the specific version. 
+
+To identify SHA you're interested in your can use following commands:
+
+
+```{bash, eval = FALSE}
+# show history of commits
+git log
+# view commits in GUI
+gitk
+```
+
+<br>
+
+### Undo a “public” change
+
+You just ran `git push`, sending your changes to GitHub, now you realize there’s a problem with one of those commits. You’d like to undo that commit. Undo with: 
+
+```{bash, eval = FALSE}
+# revert already pushed commit 
+git revert <SHA>
+```
+
+`git revert` will create a new commit that’s the opposite (or inverse) of the given SHA. This is Git’s safest, most basic “undo” scenario, because it doesn’t alter history - so you can now `git push` the new “inverse” commit to undo your wrong commit.
+
+
+### Fix the last commit message
+
+Imagine you just typed the last commit message, e.g. `git commit -m "Fxies bug page 1"`. Undo with:
+
+```{bash, eval = FALSE}
+# amend commit message
+git commit --amend
+# or
+git commit --amend -m "Fixes bug on page 1"
+```
+
+
+### Undo "local" changes
+
+1. Imagine, the cat walked across the keyboard and somehow saved the changes, then crashed the editor. You haven’t committed those changes, though. You want to undo everything in that file - just go back to the way it looked in the last commit. Undo with:
+
+```{bash, eval = FALSE}
+# retrieve previous copy of a local file from online repo
+git checkout -- <bad filename>
+```
+
+Keep in mind: any changes you “undo” this way are really gone. They were never committed, so Git can’t help us recover them later. Be sure you know what you’re throwing away here.
+
+`git checkout` alters files in the working directory to a state previously known to Git. By default, Git will assume you want to checkout HEAD - the last commit on the currently-checked-out branch. **You could provide a branch name or specific SHA you want to go back to**. E.g. do `git checkout <SHA>` to get the version of the file from the time of this particular commit SHA.
+
+
+### Reset "local" changes
+
+You’ve made some commits locally (not yet pushed), but everything is terrible, you want to undo the last three commits - like they never happened. Undo with:
+
+```{bash, eval = FALSE}
+# reset local commits
+git reset <last good SHA>
+# or
+git reset --hard <last good SHA>
+```
+
+`git reset` rewinds your repository’s history all the way back to the specified SHA. It’s as if those commits never happened. By default, git reset preserves the working directory. The commits are gone, but the contents are still on disk. This is the safest option, but often, you’ll want to “undo” the commits and the changes in one move—that’s what --hard does.
+
+
+### Similar problems with branching
+
+Imagine you made some commits, then realized you were checked out on master (i.e. you executed `git checkout` command on master branch). You wish you could make those commits on a feature branch instead. Undo with:
+
+```{bash, eval = FALSE}
+# create a new branch but don't switch to it yet
+git branch <BRANCH NAME>
+# hard reset master
+git reset --hard origin/master
+# switch to branch <BRANCH NAME>
+git checkout <BRANCH NAME>
+```
+
+Earlier we were creating new branches with `git checkout -b <BRANCH NAME>` - it’s a popular short-cut for creating a new branch and checking it out right away - but you don’t want to switch branches just yet. `git branch <BRANCH NAME>` creates a new branch pointing at your most recent commit, but leaves you checked out to master. `git reset --hard` rewinds master back to origin/master, before any of your new commits. Don’t worry, though, they are still available on a new branch. Finally, `git checkout` switches to the new branch, with all of your recent work intact.
+
+
+## Change location of the repository on your PC
+
+To move your repository to another location simply copy the entire folder to the desied location. Make sure .git (often hidden) directory is copied too! This will move the entire working directory to the new directory and will not affect the remote repository online. There is no absolute path in the .git structure and nothing preventing it to be moved, so you have nothing to do after the move. All the links to github (see in .git/config) will work as before.
 
 
 # A note about the same work on Windows
